@@ -146,9 +146,9 @@ require('includes/session.php');
         locale: lang_default,
         height: 'parent',
         header: {
-        left: 'prev,next,today print,search',
-        center: 'title',
-        right: 'providerAgenda,providerAgenda2Day,providerAgendaWeek,timelineMonth'
+          left: 'prev,next,today print,search',
+          center: 'title',
+          right: 'providerAgenda,providerAgenda2Day,providerAgendaWeek,timelineMonth'
         },
         views: {
           providerAgendaWeek: {
@@ -232,6 +232,7 @@ require('includes/session.php');
             }
         },
         eventMouseover: function(calEvent, element, view) {
+          /* Mouseover event on cells >> show tooltip */
           var tooltip = '<div class="tooltipevent">' + calEvent.description + '</div>';
           var $tooltip = $(tooltip).appendTo('body');
 
@@ -245,18 +246,22 @@ require('includes/session.php');
          });
         },
         eventMouseout: function(calEvent, element, view) {
+          /* Mouseout event on cells >> hide tooltip */
           $(this).css('z-index', 8);
           $('.tooltipevent').remove();
         },
         select: function(start, end, jsEvent, view, resource) {
-          dlgopen('add_edit_event.php?' + '&starttimeh=' + start.get('hours') + '&userid=' + resource.id + 
+          /* Selecting cell */
+          dlgopen('add_edit_event.php?' + 'starttimeh=' + start.get('hours') + '&userid=' + resource.id + 
           '&starttimem=' + start.get('minutes') + '&date=' + start.format('YYYYMMDD') // + '&catid=' + 0
            ,'_blank', 775, 375);
               },
         eventClick: function(calEvent, jsEvent, view) {
+          /* Clicking on yellow space >> open edit patient popup */
           var pccattype = (calEvent['pc_pid'] && calEvent['pc_pid'] > 0) ? 0 :  1;
           console.log(pccattype);
-          dlgopen('add_edit_event.php?date='+ calEvent.start.format('YYYYMMDD') +'&eid=' + calEvent.id +'&prov=' + pccattype, '_blank', 775, 375);
+          alert(jsEvent.title);
+          dlgopen('add_edit_event.php?' + 'date=' + calEvent.start.format('YYYYMMDD') +'&eid=' + calEvent.id +'&prov=' + pccattype, '_blank', 775, 375);
         },
         viewRender: function(view) {
             // Remember last selected date and view
@@ -289,6 +294,7 @@ require('includes/session.php');
       });
       $.datetimepicker.setLocale('<?php echo $default_lang_id['lang_code'];?>');
       
+
     });
     
     $("#pc_username").change(function() { $('#theform').submit(); });
